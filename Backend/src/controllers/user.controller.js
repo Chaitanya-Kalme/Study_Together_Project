@@ -31,8 +31,8 @@ const registerUser = asyncHandler( async (req,res) =>{
     }
 
     let avatarLocalPath;
-    if(req.files && Array.isArray(req.files.avatar) && req.files.avatar.length>0){
-        avatarLocalPath=req?.files?.avatar[0]?.path;
+    if(req.file){
+        avatarLocalPath=req.file.path;
     }
 
     const user = await User.create({
@@ -211,7 +211,7 @@ const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
 
 
 const updateAvatar= asyncHandler(async (req,res) =>{
-    const avatarLocalPath= req.files?.avatar[0]?.path
+    const avatarLocalPath= req?.file?.path
     if(!avatarLocalPath){
         throw new ApiError(404,"Avatar file is not found");
     }
