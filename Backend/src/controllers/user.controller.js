@@ -20,7 +20,7 @@ const generateAccessAndRefreshToken= async (userId) =>{
 
 
 const registerUser = asyncHandler( async (req,res) =>{
-    const {userName,password,email}=req.body
+    const {userName,password,email,college,year}=req.body
 
     if(email==="" || userName==="" || password ===""){
         throw new ApiError(400,"All fields are Required")
@@ -39,7 +39,9 @@ const registerUser = asyncHandler( async (req,res) =>{
         userName,
         password,
         email,
-        avatar:avatarLocalPath || ""
+        avatar:avatarLocalPath || "",
+        college: college || "",
+        year: year || "",
     })
     const createdUser= await User.findById(user._id).select("-password -refreshToken");
 
@@ -180,9 +182,9 @@ const getCurrentUser= asyncHandler(async (req,res) =>{
 })
 
 const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
-    const {fullName,email}= req.body;
-    if(!fullName && !email){
-        throw new ApiError(404,"FullName or Email is requried.")
+    const {fullName,email,college,year}= req.body;
+    if(!fullName && !email && !college && !year){
+        throw new ApiError(404,"FullName or Email or College or Year is requried.")
     }
     const updateFields={};
     if(fullName){
@@ -191,6 +193,12 @@ const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
     if(email){
         updateFields.email=email
     }
+    if(college){
+        updateFields.college=college
+    }
+    if(year){
+        updateFields.year=year
+    }
     const user = await User.findByIdAndUpdate(req?.user?._id,
         {
             $set:updateFields
@@ -198,7 +206,7 @@ const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
         {
             new:true
         }
-    ).select("-password")
+    ).select("-password -refreshToken")
     if(!user){
         throw new ApiError(404,"User not found")
     }

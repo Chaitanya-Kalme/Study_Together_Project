@@ -22,6 +22,16 @@ const userSchema=new Schema(
         },
         refreshToken:{
             type:String
+        },
+        watchHistory:{
+            type:Schema.Types.ObjectId,
+            ref:"Video"
+        },
+        college:{
+            type:String,
+        },
+        year:{
+            type:String
         }
     },
     {
