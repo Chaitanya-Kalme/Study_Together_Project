@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { Notes} from "../models/nodes.model.js";
+import { Notes} from "../models/notes.model.js";
 import fs from "fs"
 
 
@@ -64,8 +64,24 @@ const deleteNotes =asyncHandler(async (req,res) =>{
     
 })
 
+const getNotes= asyncHandler(async (req,res) =>{
+    const {notesId}=req.params;
+
+    const notes= await Notes.findById(notesId)
+
+    if(!notes){
+        throw new ApiError(404,"Notes not found")
+    }
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200,notes,"Notes Fetched Successfully.")
+    )
+})
+
 
 export {
     uploadNotes,
-    deleteNotes
+    deleteNotes,
+    getNotes
 }
