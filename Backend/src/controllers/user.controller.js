@@ -39,9 +39,9 @@ const registerUser = asyncHandler( async (req,res) =>{
         userName,
         password,
         email,
-        avatar:avatarLocalPath || "",
-        college: college || "",
-        year: year || "",
+        avatar:avatarLocalPath,
+        college,
+        year,
     })
     const createdUser= await User.findById(user._id).select("-password -refreshToken");
 

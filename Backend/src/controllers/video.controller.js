@@ -96,6 +96,10 @@ const updateVideo = asyncHandler(async (req, res) => {
         updateFields.thumbnail=thumbnail
         await fs.promises.unlink(video.thumbnail)
     }
+
+    if(!req.user){
+        throw new ApiError(404,"User is required to log in to update the video")
+    }
     
     const updatedVideo=await Video.findByIdAndUpdate(videoId,
         {

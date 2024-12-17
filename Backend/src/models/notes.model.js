@@ -15,10 +15,6 @@ const notesSchmea=new Schema(
             ref:"User",
             required:true,
         },
-        comments:{
-            type:Schema.Types.ObjectId,
-            ref:"Comment",
-        },
         notesFile:{
             type:String,
             required:true,
