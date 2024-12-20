@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FiAlignJustify } from "react-icons/fi";
 import { MdOutlineAccountCircle } from "react-icons/md";
+import { NavLink } from 'react-router';
 
 
 
@@ -21,15 +22,15 @@ function Navbar() {
 
                 {/* Side Bar Section */}
                 <div className='w-full justify-end cursor-pointer hidden lg:flex '>
-                    <div id="HomeBtn" className='rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300'>Home</div>
-                    <div id="notes_Btn" className='rounded-3xl p-2 text-2xl text-right hover:bg-blue-100 duration-300'>Notes</div>
-                    <div id="lectures_Btn" className='rounded-3xl p-2 text-2xl text-right hover:bg-blue-100 duration-300'>Lectures</div>
-                    <div id="AboutBtn" className='rounded-3xl p-2 text-2xl text-right hover:bg-blue-100 duration-300'>About</div>
-                    <div id="contact_us_Btn" className='rounded-3xl p-2 text-2xl text-right hover:bg-blue-100 duration-300'>Contact Us</div>
-                    <div className='border-2 border-black rounded-3xl px-4 py-2 hover:bg-blue-100 duration-300 flex space-x-2'>
+                    <NavLink to='/' id="HomeBtn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? "text-white":"text-black"}`}>Home</NavLink>
+                    <NavLink to='/notes' id="notes_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? "text-white":"text-black"}`}>Notes</NavLink>
+                    <NavLink to='/lectures' id="lectures_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? "text-white":"text-black"}`}>Lectures</NavLink>
+                    <NavLink to='/about' id="AboutBtn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? "text-white":"text-black"}`}>About</NavLink>
+                    <NavLink to='/contact' id="contact_us_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? "text-white":"text-black"}`}>Contact Us</NavLink>
+                    <NavLink to='/signIn' className={({isActive}) =>`border-2 border-black rounded-3xl px-4 py-2 ${isActive? "text-white" :"text-black"} hover:bg-blue-100 duration-300 flex space-x-2 mx-2`}>
                         <MdOutlineAccountCircle className='text-3xl '/>
                         <div id="signIn_Btn" className='text-right text-2xl'>Sign In</div>
-                    </div>
+                    </NavLink>
                 </div>
                 <div className='w-full justify-items-end lg:hidden'>
                     <div className='text-right rounded-full text-4xl p-2 hover:bg-blue-100' onClick={toogleVisibility}>
@@ -39,7 +40,7 @@ function Navbar() {
                 </div>
             </div>
             {isVisible && (
-                <div className='flex-col justify-items-end text-center mt-9 bg-orange-300 lg:hidden absolute right-0 '>
+                <div className='flex-col justify-items-end text-center bg-orange-300 lg:hidden absolute right-0 sm:mt-16'>
                     <div id="HomeBtn1" className='rounded-3xl p-2 text-2xl  hover:bg-green-100 duration-300'>Home</div>
                     <div className="w-full border-b-2 border-black my-2"></div>
                     <div id="notes_Btn1" className='rounded-3xl p-2 text-2xl text-right hover:bg-green-100 duration-300'>Notes</div>
