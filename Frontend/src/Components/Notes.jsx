@@ -1,30 +1,35 @@
-import React from "react";
 
-const Notes = () =>{
+import React, { useState } from "react";
+import SearchNotes from "./searchNotes";
+import UploadNotes from "./uploadNotes";
+
+
+
+
+const Notes = () => {
+
+    const [showUploadNotes,setShowUploadNotes]= useState(false)
 
     return (
         <>
-            <div className="mt-28 md:mt-28 lg:mt-20 max-w-full">
-                <div className="bg-blue-200 p-4 justify-center text-center space-y-4">
-                    <div className="text-2xl font-semibold italic font-serif">Search Notes By:</div>
-                    <div className="flex justify-between gap-x-5 ">
-                        <div className="w-7/12 space-y-5">
-                            <div className="text-2xl  md:whitespace-nowrap text-center rounded-full font-serif italic">Search for Subject</div>
-                            <input type="text" placeholder="Search for Subject" className="border-2 border-black text-center bg-blue-100 w-10/12 rounded-2xl p-1"/>
-                        </div>
-                        <div className="w-7/12 space-y-5">
-                            <div className="text-2xl md:whitespace-nowrap text-center rounded-full font-serif italic">Search for Chapter</div>
-                            <input type="text" placeholder="Search for Chapter" className="border-2 border-black text-center bg-blue-100 w-10/12 rounded-2xl p-1"/>
-                        </div>
-                        
-                    </div>
-                    
+            <div className="bg-blue-200 mt-24 md:mt-20 lg:mt-20 max-w-full">
+
+                <div className="flex justify-center space-x-52">
+                    <button className={`w-1/4 space-y-5 text-2xl  ${showUploadNotes ? " bg-blue-300 border-4" : "bg-green-300"} md:whitespace-nowrap text-center rounded-lg font-serif italic top-10 mt-10 p-2 border-black border-2 hover:bg-orange-300 hover:duration-300`} onClick={() => setShowUploadNotes(true)}>
+                        Upload Notes
+                    </button>
+                    <button className={`w-1/4 space-y-5 text-2xl ${!showUploadNotes ? " bg-blue-300 border-4" : "bg-green-300"}  md:whitespace-nowrap text-center rounded-lg font-serif italic top-10 mt-10 p-2 border-black border-2 hover:bg-orange-300 hover:duration-300`} onClick={() => setShowUploadNotes(false)}>
+                        Search Notes
+                    </button>
                 </div>
-                <div className="bg-blue-200 p-4 justify-center text-center space-y-4">
-                    
-                   
-                </div>
+                {showUploadNotes ?
+                    <UploadNotes/>
+                    :
+                    <SearchNotes />
+                }
+
             </div>
+
         </>
     )
 }
