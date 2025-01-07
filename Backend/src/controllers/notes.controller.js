@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Notes} from "../models/notes.model.js";
 import fs from "fs"
+import { notStrictEqual } from "assert";
 
 
 const uploadNotes= asyncHandler(async (req,res)=>{
@@ -11,8 +12,7 @@ const uploadNotes= asyncHandler(async (req,res)=>{
     if(!name || !subject){
         throw new ApiError(404,"name or subject is required")
     }
-
-    const notesFile=req?.file?.path
+    const notesFile=req?.file?.filename
     if(!notesFile){
         throw new ApiError(404,"Notes File is required")
     }
@@ -20,12 +20,11 @@ const uploadNotes= asyncHandler(async (req,res)=>{
     if(!user){
         throw new ApiError(404,"User is not found")
     }
-
     const notes= await Notes.create({
         name,
         subject,
         owner:user,
-        notesFile
+        notesFile:notesFile
     })
 
     if(!notes){
@@ -79,9 +78,32 @@ const getNotes= asyncHandler(async (req,res) =>{
     )
 })
 
+const searchNotes = asyncHandler(async (req,res) =>{
+    const subject = req.params.subject
+    const chapter = req.params.chapter
+    if(!subject){
+        throw new ApiError(404,"Chapter Name or Subject is required.")
+    }
+    const page= 1;
+    const limit = 10; 
+    const notes = await Notes.find({$and:[
+        {subject:{$regex:new RegExp(subject,'i')}},
+        {name:{$regex:new RegExp(chapter,'i')}}
+        ]})
+    .skip((page-1)*limit)
+    .limit(limit)
+
+    if(!notes){
+        throw new ApiError(404,"Notes not found")
+    }
+    return res.status(200)
+    .json(new ApiResponse(200,notes,"Notes Fetched Successfully"))
+})
+
 
 export {
     uploadNotes,
     deleteNotes,
-    getNotes
+    getNotes,
+    searchNotes
 }

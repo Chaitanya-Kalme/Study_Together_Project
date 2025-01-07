@@ -5,10 +5,12 @@ const notesSchmea=new Schema(
         name:{
             type:String,
             required:true,
+            index:true
         },
         subject:{
             type:String,
-            required:true
+            required:true,
+            index:true
         },
         owner:{
             type:Schema.Types.ObjectId,
