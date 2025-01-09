@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import notesService from '../Services/notesService'
 
 export default function UploadNotes() {
@@ -18,7 +17,6 @@ export default function UploadNotes() {
             setIsVisible(false)
             const response = notesService.uploadNotes(chapter,subject,notesFile)
             .then(() =>{
-                console.log(response)
                 setNotesUploaded(true)
             })
             .catch(() => setNotesUploaded(false))
@@ -26,7 +24,7 @@ export default function UploadNotes() {
     }
     
     return (
-        <form onSubmit={takeNotesAndUpload} className="bg-blue-200 p-4 justify-center text-center space-y-4">
+        <form onSubmit={takeNotesAndUpload} className="bg-blue-200 p-4 justify-center text-center space-y-4 mb-10">
             <div className="text-2xl font-semibold italic font-serif space-y-5 py-5">Upload Notes: </div>
             <div className="flex justify-between gap-x-5 ">
                 <div className="w-7/12 space-y-5">

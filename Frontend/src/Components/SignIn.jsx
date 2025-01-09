@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import authService from '../Services/authService'
 import { login as authLogin} from '../store/authSlice'
 import { useDispatch } from 'react-redux'
+ 
 
 function SignIn() {
     const [userName, setUserName] = useState("")
@@ -13,6 +14,8 @@ function SignIn() {
 
     const submitForm = (e) => {
         e.preventDefault();
+
+
         const avatarFile = document.querySelector('#avatar')
         
         authService.createAccount(email,password,userName,avatarFile.files[0])
@@ -21,6 +24,7 @@ function SignIn() {
         
             if(userData){
                 dispatch(authLogin(userData))
+                window.alert("User Logged In Successfully")
                 navigate('/profile')
             }
             else{

@@ -32,7 +32,7 @@ export class NotesService{
         try {
             const note = await axios.get(`/api/v1/notes/getNotes/${notesId}`)
             if(note){
-                return note.data
+                return note
             }
             else{
                 console.log("Notes not found")

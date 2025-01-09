@@ -18,7 +18,8 @@ function Login() {
             const userData = response.data;
             if (userData) {
                 dispatch(authLogin(userData))
-                console.log(userData)
+                window.alert("User Logged In Successfully")
+                navigate('/')
 
             }
             else {

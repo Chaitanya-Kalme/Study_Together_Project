@@ -52,6 +52,56 @@ export class AuthService{
             
         }
     }
+    async updateAvatar(newFile) {
+        try {
+            
+            const formData= new FormData()
+            formData.append('avatar',newFile)
+
+            await axios.post('/api/v1/users/updateAvatar',formData)
+            .then((response) =>{
+                return response
+            })
+            .catch(() =>{
+                return null;
+            })
+            
+        } catch (error) {
+            console.error("Server error while updating avatar")
+            
+        }
+    }
+    async updateUserInformation(fullName,email,college,year){
+        try {
+            const formData= {}
+
+            formData['fullName']=fullName
+            formData['email']=email
+            formData['college']=college
+            formData['year']=year
+            
+            await axios.patch('/api/v1/users/updateDetails',formData)
+            .then((response) =>{
+                return response.data
+            })
+            .catch((error) =>{
+                console.log("Something went wrong while updating information",error)
+                return null
+            })
+        } catch (error) {
+            console.error("Server error while updating information")
+            
+        }
+    }
+    async removeAvatar() {
+        await axios.delete('/api/v1/users/removeAvatar')
+        .then((response) =>{
+            return response
+        })
+        .catch((error) =>{
+            console.error("Something went wrong while deleting avatar");
+        })
+    }
 }
 
 const authService = new AuthService()

@@ -2,17 +2,20 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import authService from '../Services/authService'
 import { logout } from '../store/authSlice'
+import { useNavigate } from 'react-router'
 
 function LogoutBtn({
     className=""
 }) {
     const dispatch= useDispatch()
+    const navigate= useNavigate()
 
     const logoutHandler = () =>{
         authService.logout()
         .then(() =>{
             dispatch(logout())
             window.alert("Logout Successfully")
+            navigate('/')
         })
     }
   return (

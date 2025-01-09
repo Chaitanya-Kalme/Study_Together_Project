@@ -1,9 +1,7 @@
-import React from 'react'
-import NoteCard from './NoteCard'
-import axios from 'axios'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import lectureService from '../Services/lectureService'
 
-export default function SearchNotes() {
+export default function SearchLecture() {
     const [notes, setNotes] = useState([])
     const [subject, setSubject] = useState("")
     const [chapter, setChapter] = useState("")
@@ -17,26 +15,12 @@ export default function SearchNotes() {
         }
         else {
             setIsVisible(false)
-            axios.get(`/api/v1/notes/searchNotes/${subject}/${chapter}`)
-            .then((response) => {
-                const notesResponse = response.data.data;
-                setNotes(notesResponse)
-                if(notesResponse.length === 0){
-                    setNoNotes(true)
-                }
-                else{
-                    setNoNotes(false)
-                }
-                })
-            .catch((error) =>{
-                
-            })
         }
     }
     return (
         <div className="mt-10 md:mt-1 lg:mt-10 max-w-full mb-10">
             <form onSubmit={searchNotes} className="bg-blue-200 p-4 justify-center text-center space-y-4">
-                <div className="text-2xl font-semibold italic font-serif">Search Notes By:</div>
+                <div className="text-2xl font-semibold italic font-serif">Search Lecture By:</div>
                 <div className="flex justify-between gap-x-5 ">
                     <div className="w-7/12 space-y-5">
                         <div className="text-2xl  md:whitespace-nowrap text-center rounded-full font-serif italic">Search for Subject</div>
