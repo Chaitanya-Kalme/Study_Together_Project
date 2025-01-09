@@ -11,7 +11,6 @@ const getFile = asyncHandler(async (req,res) =>{
     }
     const __filename = fileURLToPath(import.meta.url);
 
-    // __dirname is the directory of __filename
     const __dirname = path.dirname(__filename).replace("\\src\\utils","");
     const file = path.join(__dirname,'\\public','\\temp',filePath)
     if(!file){

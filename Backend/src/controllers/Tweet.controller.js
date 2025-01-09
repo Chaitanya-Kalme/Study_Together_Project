@@ -14,7 +14,7 @@ const createTweet = asyncHandler(async (req, res) => {
     if(!user){
         throw new ApiError(400,"User must be logged in to create Tweet")
     }
-    const image= req?.file?.path
+    const image= req?.file?.filename
     
     const tweet= await Tweet.create({
         content,
@@ -46,7 +46,7 @@ const getUserTweets = asyncHandler(async (req, res) => {
 const updateTweet = asyncHandler(async (req, res) => {
     const {tweetId} = req.params
     const {content} = req.body
-    const image = req?.file?.path
+    const image = req?.file?.filename
     if(!content && !image){
         throw new ApiError(404,"Content Or image is required")
     }

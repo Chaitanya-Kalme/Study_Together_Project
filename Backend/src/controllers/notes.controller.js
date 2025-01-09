@@ -39,7 +39,6 @@ const uploadNotes= asyncHandler(async (req,res)=>{
 
 const deleteNotes =asyncHandler(async (req,res) =>{
     const {notesId} = req.params
-    console.log(req.params)
 
     const notes = await Notes.findById(notesId)
 
@@ -48,8 +47,8 @@ const deleteNotes =asyncHandler(async (req,res) =>{
     }
     
     try {
-        await notes.deleteOne()
         await fs.promises.unlink(notes.notesFile)
+        await notes.deleteOne()
         
     } catch (error) {
         throw new ApiError(400,"Something went wrong while deleting the notes")

@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js"
 import jwt from "jsonwebtoken"
+import fs from "fs"
 
 
 const generateAccessAndRefreshToken= async (userId) =>{
@@ -30,16 +31,14 @@ const registerUser = asyncHandler( async (req,res) =>{
         throw new ApiError(400,"User Already Exists.")
     }
 
-    let avatarLocalPath;
-    if(req.file){
-        avatarLocalPath=req.file.path;
-    }
+    const image = `${userName[0].toUpperCase()}.jpg`
+    let avatarLocalPath=req?.file?.filename || image;
 
     const user = await User.create({
         userName,
         password,
         email,
-        avatar:avatarLocalPath,
+        avatar: avatarLocalPath,
         college,
         year,
     })
@@ -188,7 +187,7 @@ const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
     }
     const updateFields={};
     if(fullName){
-        updateFields.fullName=fullName
+        updateFields.userName=fullName
     }
     if(email){
         updateFields.email=email
@@ -204,7 +203,7 @@ const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
             $set:updateFields
         },
         {
-            new:true
+            new:false
         }
     ).select("-password -refreshToken")
     if(!user){
@@ -219,7 +218,8 @@ const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
 
 
 const updateAvatar= asyncHandler(async (req,res) =>{
-    const avatarLocalPath= req?.file?.path
+    const avatarLocalPath= req?.file?.filename  
+
     if(!avatarLocalPath){
         throw new ApiError(404,"Avatar file is not found");
     }
@@ -240,7 +240,30 @@ const updateAvatar= asyncHandler(async (req,res) =>{
     )
 })
 
+const removeAvatar = asyncHandler(async (req,res) => {
+    const avatarLocalPath= `${req.user.userName[0].toUpperCase()}.jpg`;
+    if(req.user?.avatar!=avatarLocalPath){
+        await fs.promises.unlink("public\\temp\\"+req.user?.avatar)
+    }
+    
+    await User.findByIdAndUpdate(req.user?._id,
+        {
+            $set:{
+                avatar:avatarLocalPath
+            }
+        },
+        {
+            new:true
+        }
+    ).select("-password")
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{},"Avatar Updated Successfully.")
+    )
+})
 
 
 
-export {registerUser,loginUser,logOutUser,refreshAccessToken,changePassword,updateCurrentUserDetails,updateAvatar,getCurrentUser}
+
+export {registerUser,loginUser,logOutUser,refreshAccessToken,changePassword,updateCurrentUserDetails,updateAvatar,getCurrentUser,removeAvatar}

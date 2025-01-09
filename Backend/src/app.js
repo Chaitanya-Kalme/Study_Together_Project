@@ -9,7 +9,7 @@ app.use(cors({
     credentials:true
 }))
 app.use(express.json({
-    limit:"15kb"
+    limit:"100mb"
 }))
 
 app.use(urlencoded({extended:true,limit:"15kb"}))

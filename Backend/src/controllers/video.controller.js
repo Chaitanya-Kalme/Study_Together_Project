@@ -12,14 +12,14 @@ const getAllVideos = asyncHandler(async (req, res) => {
 })
 
 const publishAVideo = asyncHandler(async (req, res) => {
-    const { title, description} = req.body
+    const { title, description,isPublicAvailable,subject} = req.body
     
     const user= req.user
     if(!user){
         throw new ApiError(404,"User is not logged in")
     }
-    const thumbnail= await req?.files?.thumbnail[0]?.path;
-    const videoFile= await req?.files?.videoFile[0]?.path;
+    const thumbnail= await req?.files?.thumbnail[0]?.filename;
+    const videoFile= await req?.files?.videoFile[0]?.filename;
 
     
     if(!thumbnail){
@@ -41,6 +41,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
         videoFile,
         thumbnail,
         owner:user,
+        subject,
+        isPublicAvailable
     })
 
     
@@ -74,7 +76,7 @@ const updateVideo = asyncHandler(async (req, res) => {
 
     const {title,description}=req.body
 
-    const thumbnail=req?.file?.path;
+    const thumbnail=req?.file?.path?.replace("public\temp","");
     const video =await Video.findById(videoId)
     
 

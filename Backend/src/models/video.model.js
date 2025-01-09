@@ -37,6 +37,10 @@ const videoSchema=new Schema(
             required:true,
             default:true
         },
+        subject:{
+            type:String,
+            required:true
+        }
     },
     {
         timestamps:true
