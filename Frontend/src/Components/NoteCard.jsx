@@ -21,7 +21,7 @@ function NoteCard({
                     </div>
 
                 </div>
-                <iframe src={`/api/v1/getFile/${notesFile}` + '#zoom=100'} width="100%" height="600px" title="PDF Viewer"></iframe>
+                <iframe src={`/api/v1/getFile/${notesFile}` + '#zoom=100'} width="100%" height="600px" title="PDF Viewer"/>
             </div>
         </>
     )

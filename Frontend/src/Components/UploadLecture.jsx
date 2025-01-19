@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import lectureService from '../Services/lectureService'
+import { useSelector } from 'react-redux'
 
 export default function UploadLecture() {
+    const data= useSelector((state) => state.auth.userData)
     const [subject, setSubject] = useState("")
     const [chapter,setChapter] = useState("")
     const [lectureUploaded, setLectureUploaded] = useState(false)
@@ -21,9 +23,18 @@ export default function UploadLecture() {
             lectureService.uploadLecture(chapter,subject,lectureFile,thumbNail,description,isPublicAvailable)
             .then((response) =>{
                 setLectureUploaded(true)
+                const timer= setTimeout(() => {
+                    location.reload()
+                }, 1000);
             })
             .catch(() => setLectureUploaded(false))
         }
+    }
+
+    if(data==null){
+        return (
+            <div className='text-4xl font-bold italic text-center pt-10 items-center mt-10'>Login is Required to Upload the Lecture</div>
+        )
     }
     
     return (

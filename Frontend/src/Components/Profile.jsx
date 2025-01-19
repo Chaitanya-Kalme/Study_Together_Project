@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import authService from '../Services/authService'
 import { useNavigate } from 'react-router'
 import { FaPencilAlt } from "react-icons/fa";
+import { logout } from '../store/authSlice';
 
 
 function Profile() {
@@ -18,6 +19,10 @@ function Profile() {
   const [addEmalVisible,setAddEmailVisible] = useState(false)
   const [addCollegeVisible,setAddCollegeVisible] = useState(false)
   const [addYearVisible,setAddYearVisible] = useState(false)
+  const [loading,setLoading] = useState(true)
+  const dispatch= useDispatch()
+  const navigate= useNavigate()
+
 
 
   const updateAvatar = () => {
@@ -39,15 +44,45 @@ function Profile() {
   }
 
   const removeAvatar = () =>{
-    authService.removeAvatar()
-    .then(() => location.reload())
-    .catch((error) => console.error("Server error"))
+    const userResponse = window.confirm('Do you want to remove Avatar');
+    if(userResponse){
+      authService.removeAvatar()
+      .then(() => location.reload())
+      .catch((error) => console.error("Server error"))
+    }
   }
+
+  const removeUser=  () => {
+    const userResponse = window.confirm('Do you want to remove Account');
+    if(userResponse){
+      authService.deleteUser()
+      .then(() =>{
+        navigate('/')
+      })
+      .catch(() =>{
+        console.log("error")
+      })
+    }
+  }
+
+  useEffect(() => {
+      const timer= setTimeout(() =>{
+        setLoading(false);
+      },2000)
+
+      return () => clearTimeout(timer)
+  },[data])
+
+  if(loading){
+    return <div className='mt-64 text-4xl font-bold text-center'>Loading...</div>
+  }
+
+  const yearValues=[1,2,3,4,5,6]
 
   return (
     <>
       {data!=null ? (
-        <div className='bg-blue-200 mt-20 flex mb-10'>
+        <div className='bg-blue-200 mt-20 flex mb-10 sm:justify-between lg:justify-normal'>
           <div className='mt-10 w-3/12 space-y-3'>
             <div className='text-2xl ml-16 font-bold italic'>Avatar:</div>
             <img src={`/api/v1/getFile/${data.avatar}`} className='left-2 ml-4 w-full ' />
@@ -60,8 +95,7 @@ function Profile() {
               </div>}
               <button className='text-2xl border-4 p-2 rounded-3xl ml-3 border-black hover:bg-orange-200 duration-200 ' onClick={() => removeAvatar()}>Remove Avatar</button>
           </div>
-          <div className='justify-items-end lg:pl-64 flex-col mt-16'>
-            
+          <div className='justify-items-end lg:pl-64 flex-col mt-16 '>
             <div className='text-center text-2xl font-serif font-bold italic p-2'> Name:  {data.userName}
               {!addFullNameVisible? <button className='text-2xl border-4 p-2 rounded-3xl ml-3 border-black hover:bg-orange-200 duration-200' onClick={() => setAddFullNameVisible(!addFullNameVisible)}><FaPencilAlt /></button>:
               <div className='flex-col'>
@@ -87,10 +121,20 @@ function Profile() {
             <div className='text-center text-2xl font-serif font-bold italic p-2'>Year:  {data.year}
               {!addYearVisible? <button className='text-2xl border-4 p-2 rounded-3xl ml-3 border-black hover:bg-orange-200 duration-200' onClick={() => setAddYearVisible(!addYearVisible)}><FaPencilAlt /></button>:
               <div className='flex-col'>
-                <input type="text" className='bg-slate-50 text-xl md:whitespace-nowrap' onChange={(e) => setYear(e.target.value)} />
+                <select value={yearValues} className='bg-slate-50 text-xl md:whitespace-nowrap' onChange={(e) => setYear(e.target.value)}>
+                  <option >--Please choose a number--</option>
+                  {yearValues.map((num) => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </select>
                 <button id='Submit_btn' type='sumbit' className='border-2 border-black px-2 text-2xl bg-white my-2 hover:bg-blue-200 rounded-lg duration-200'onClick={() => updateInformation()} >Submit</button>
               </div>
             }
+            <div>
+              <button type='sumbit' className='border-2 border-black px-2 text-2xl bg-white my-2 hover:bg-blue-200 rounded-lg duration-200' onClick={removeUser}>Remove Account</button>
+            </div>
             </div>
           </div>
         </div>

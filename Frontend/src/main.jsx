@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import Profile from './Components/Profile.jsx'
 import Login from './Components/Login.jsx'
 import Lecture from './Components/Lecture.jsx'
+import LecturePage from './Components/LecturePage.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(

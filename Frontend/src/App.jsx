@@ -8,7 +8,6 @@ import { login,logout } from './store/authSlice.js'
 import authService from './Services/authService.js'
 
 function App() {
-  const [loading,setLoading] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() =>{
@@ -21,8 +20,7 @@ function App() {
       else{
         dispatch(logout())
       }
-    }).catch()
-    .finally(() => setLoading(false))
+    })
   },[])
 
   return (

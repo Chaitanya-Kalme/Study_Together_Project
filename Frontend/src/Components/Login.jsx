@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import authService from '../Services/authService'
 import { login as authLogin } from '../store/authSlice'
@@ -10,6 +10,8 @@ function Login() {
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    const [data,setData]= useState(true)
 
     const submitForm = (e) => {
         e.preventDefault();
@@ -23,21 +25,29 @@ function Login() {
 
             }
             else {
-                console.error("Error while login")
+                setData(false)
+                
             }
         })
         .catch((error) => {
-            console.error("Error while Login", error)
+            console.error("Error while login")
+            
         })
     }
-    
+    useEffect(() =>{
+        if(setData===false){
+            return (
+                <div>User Does not Exist</div>
+            )
+        }
+    },[setData])
 
     return (
         <>
             <form onSubmit={submitForm} id='register_form' >
                 <div className='lg:mt-28 mt-32 lg:mx-72 py-10 bg-green-200 border-4 border-blue-900 text-center space-y-2 mb-24'>
                     <div className='p-2 mt-2 text-3xl border-spacing-1.5 border-black rounded-full '>
-                        <div className='text-center'>LogIn Page</div>
+                        <div className='text-center'>Log In Page</div>
                     </div>
                     <div className='flex mx-5 lg:mx-52 space-x-10 p-2'>
                         <div className='text-xl'>Enter the Email:</div>
@@ -53,6 +63,7 @@ function Login() {
                         <button type='sumbit' className='border-2 border-black px-2 text-2xl bg-white my-2 hover:bg-blue-200 rounded-lg duration-200' onClick={() => navigate('/signin')}>SignUp</button>
 
                     </div>
+                    {!data? <div className='text-xl font-bold w-full justify-center'>User Does not exist</div>: null}
                     
                 </div>
             </form>

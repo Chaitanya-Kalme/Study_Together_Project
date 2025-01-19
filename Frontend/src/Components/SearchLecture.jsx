@@ -1,25 +1,38 @@
 import React, { useState } from 'react'
 import lectureService from '../Services/lectureService'
+import LectureCard from './LectureCard'
 
 export default function SearchLecture() {
-    const [notes, setNotes] = useState([])
+    const [lectures, setLectures] = useState([])
     const [subject, setSubject] = useState("")
     const [chapter, setChapter] = useState("")
     const [isVisible, setIsVisible] = useState(false)
-    const [noNotes,setNoNotes] =useState(false)
+    const [noLecture,setNoLecture] =useState(false)
 
-    const searchNotes = (e) => {
+    const searchLecture = (e) => {
         e.preventDefault()
         if (subject === "" && chapter === "") {
             setIsVisible(true)
         }
         else {
             setIsVisible(false)
+            lectureService.getAllLecture({subject,chapter})
+            .then((response) =>{
+                const lectureResponse= response.data.data;
+                setLectures(lectureResponse)
+                console.log(lectureResponse)
+                if(lectureResponse.length===0){
+                    setNoLecture(true)
+                }
+                else{
+                    setNoLecture(false)
+                }
+            })
         }
     }
     return (
         <div className="mt-10 md:mt-1 lg:mt-10 max-w-full mb-10">
-            <form onSubmit={searchNotes} className="bg-blue-200 p-4 justify-center text-center space-y-4">
+            <form onSubmit={searchLecture} className="bg-blue-200 p-4 justify-center text-center space-y-4">
                 <div className="text-2xl font-semibold italic font-serif">Search Lecture By:</div>
                 <div className="flex justify-between gap-x-5 ">
                     <div className="w-7/12 space-y-5">
@@ -35,19 +48,20 @@ export default function SearchLecture() {
                 {isVisible === true &&
                     <div className="font-bold italic text-xl">Subject or Chapter is Required.</div>
                 }
-                <div className={`bg-blue-200 p-4 text-center space-y-4 text-2xl font-bold italic ${isVisible===false && subject!=="" && noNotes? "":"hidden"}`}>
-                        Notes not available for this Subject or Chapter
+                <div className={`bg-blue-200 p-4 text-center space-y-4 text-2xl font-bold italic ${isVisible===false && subject!=="" && noLecture? "":"hidden"}`}>
+                        Lecture not available for this Subject or Chapter
                 </div>
             </form >
             {isVisible === false &&
-                <div className="bg-blue-200 p-4 justify-center text-center space-y-4 flex  flex-wrap" >
-                    {notes.map((note) => (
-                        <NoteCard
-                            key={note._id}
-                            notesId={note._id}
-                            chapterName={note.name}
-                            subjectName={note.subject}
-                            notesFile={note.notesFile}
+                <div className="bg-blue-200 p-4 text-center flex flex-wrap space-x-10 ml-10 gap-y-10" >
+                    {lectures.map((lecture) => (
+                        <LectureCard
+                            key={lecture._id}
+                            id={lecture._id}
+                            chapterName={lecture.title}
+                            subjectName={lecture.subject}
+                            thumbnail={lecture.thumbnail}
+                            videoFile={lecture.videoFile}
                         />
 
                     ))}

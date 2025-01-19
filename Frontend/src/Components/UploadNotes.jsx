@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import notesService from '../Services/notesService'
+import { useSelector } from 'react-redux'
 
 export default function UploadNotes() {
     const [subject, setSubject] = useState("")
@@ -7,6 +8,7 @@ export default function UploadNotes() {
     const [notesUploaded, setNotesUploaded] = useState(false)
     const [notesFile,setNotesFile] =useState(null)
     const [isVisible,setIsVisible] = useState(false)
+    const data= useSelector((state) =>state.auth.userData)
 
     const takeNotesAndUpload = (e) => {
         e.preventDefault()
@@ -23,6 +25,13 @@ export default function UploadNotes() {
         }
     }
     
+    if(data==null){
+        return (
+            <div className='text-4xl font-bold italic text-center pt-10 items-center mt-10'>Login is Required to Upload the Notes</div>
+        )
+    }
+
+
     return (
         <form onSubmit={takeNotesAndUpload} className="bg-blue-200 p-4 justify-center text-center space-y-4 mb-10">
             <div className="text-2xl font-semibold italic font-serif space-y-5 py-5">Upload Notes: </div>

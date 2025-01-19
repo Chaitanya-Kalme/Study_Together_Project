@@ -79,9 +79,10 @@ export class AuthService{
             formData['email']=email
             formData['college']=college
             formData['year']=year
-            
+
             await axios.patch('/api/v1/users/updateDetails',formData)
             .then((response) =>{
+                this.removeAvatar()
                 return response.data
             })
             .catch((error) =>{
@@ -101,6 +102,27 @@ export class AuthService{
         .catch((error) =>{
             console.error("Something went wrong while deleting avatar");
         })
+    }
+    async deleteUser(userId){
+        try {
+            let userData;
+            await this.getCurrentUser()
+            .then((response) => {
+                userData = response.data.data;
+            })
+            .catch(() => console.log("Something went wrong"))
+            console.log(userData._id)
+            await axios.delete(`/api/v1/users/deleteUser/${userData._id}`)
+            .then((response) =>{
+                return response;
+            })
+            .catch((error) =>{
+                return error;
+            })
+        } catch (error) {
+            console.error("Something went wrong while deleting user");   
+        }
+
     }
 }
 

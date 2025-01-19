@@ -12,7 +12,7 @@ const Hero= () =>{
             {/* Notes Section */}
             <div id="Notes_Section" className="flex bg-cyan-200 mt-20">
                 <div className="flex-col text-xl ml-3 justify-items-center text-center m-10">
-                    <div className="text-2xl border-4 border-black hover:bg-green-300 hover:duration-200 rounded-full border-spacing-2 md:whitespace-nowrap sm:p-2 lg:p-4 sm:w-1/3 lg:w-1/10 font-bold italic font-serif" onClick={() => navigate('/notes')}>Notes</div>
+                    <div className="text-2xl border-4 border-black hover:bg-green-300 hover:duration-200 rounded-full border-spacing-2 md:whitespace-nowrap sm:p-2 lg:p-4 sm:w-1/3 lg:w-1/10 font-bold italic font-serif cursor-pointer" onClick={() => navigate('/notes')}>Notes</div>
                     <div>Here you can get notes of your seniors and friends and get the marks in your exams. You can also contribute your notes.</div>
                 </div>
                 <div className="flex w-full justify-end m-5 size-80">
@@ -26,7 +26,7 @@ const Hero= () =>{
                     <img src={Lecture_image} alt="Notes Image" />
                 </div>
                 <div className="flex-col text-xl ml-3 justify-items-center text-center m-4">
-                    <div className="text-2xl border-4 border-black hover:bg-green-300 hover:duration-200 rounded-full border-spacing-2 md:whitespace-nowrap sm:p-2 lg:p-4 sm:w-1/3 lg:w-1/10 font-bold italic font-serif">Lectures</div>
+                    <div className="text-2xl border-4 border-black hover:bg-green-300 hover:duration-200 rounded-full border-spacing-2 md:whitespace-nowrap sm:p-2 lg:p-4 sm:w-1/3 lg:w-1/10 font-bold italic font-serif cursor-pointer" onClick={() => navigate('/lectures')}>Lectures</div>
                     <div>Here you can get lectures of your professor and other professors. If you want to contribute your Lectures then you can also contribute.</div>
                 </div>
             </div>
