@@ -4,6 +4,7 @@ import authService from '../Services/authService'
 import { useNavigate } from 'react-router'
 import { FaPencilAlt } from "react-icons/fa";
 import { logout } from '../store/authSlice';
+import { toast ,ToastContainer} from 'react-toastify';
 
 
 function Profile() {
@@ -32,12 +33,12 @@ function Profile() {
       location.reload()
     })
     .catch((error) =>{
-      console.error("Something went wrong",error)
+      toast.error("Something went wrong",error)
     })    
   }
 
   const updateInformation = () =>{
-      authService.updateUserInformation(fullName,email,college,year)
+      authService.updateUserInformation({fullName,email,college,year})
       .then((response) =>{
         location.reload()
       })
@@ -60,15 +61,29 @@ function Profile() {
         navigate('/')
       })
       .catch(() =>{
-        console.log("error")
+        toast.error("error")
       })
     }
+  }
+
+  const removeCollege = () =>{
+    const userResponse = window.confirm("Do you want to remove College");
+    if(userResponse){
+      authService.removeCollege()
+      .then(() =>{
+        location.reload();
+      })
+      .catch((err) =>{
+        toast.error("Error")
+      })
+    }
+
   }
 
   useEffect(() => {
       const timer= setTimeout(() =>{
         setLoading(false);
-      },2000)
+      },1000)
 
       return () => clearTimeout(timer)
   },[data])
@@ -115,6 +130,7 @@ function Profile() {
               <div className='flex-col'>
                 <input type="text" className='bg-slate-50 text-xl md:whitespace-nowrap' onChange={(e) => setCollege(e.target.value)} />
                 <button id='Submit_btn' type='sumbit' className='border-2 border-black px-2 text-2xl bg-white my-2 hover:bg-blue-200 rounded-lg duration-200'onClick={() => updateInformation()} >Submit</button>
+                <button id='Submit_btn' type='sumbit' className='border-2 border-black px-2 text-2xl bg-white my-2 hover:bg-blue-200 rounded-lg duration-200 ml-4 ' onClick={() => removeCollege()} >Remove College</button>
               </div>
               }
             </div>
@@ -122,7 +138,15 @@ function Profile() {
               {!addYearVisible? <button className='text-2xl border-4 p-2 rounded-3xl ml-3 border-black hover:bg-orange-200 duration-200' onClick={() => setAddYearVisible(!addYearVisible)}><FaPencilAlt /></button>:
               <div className='flex-col'>
                 <select value={yearValues} className='bg-slate-50 text-xl md:whitespace-nowrap' onChange={(e) => setYear(e.target.value)}>
-                  <option >--Please choose a number--</option>
+                  <option >
+                    {
+                      !year?
+                      <div>
+                        --Please Select the options--
+                      </div>:
+                      <div>{year}</div>
+                    }
+                    </option>
                   {yearValues.map((num) => (
                     <option key={num} value={num}>
                       {num}
@@ -141,6 +165,7 @@ function Profile() {
       ) :
         <div className='mt-52 text-center font-bold italic text-4xl'>User Data not found</div>
       }
+      <ToastContainer/>
     </>
 
 

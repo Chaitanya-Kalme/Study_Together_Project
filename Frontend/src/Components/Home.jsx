@@ -4,6 +4,8 @@ import Lecture_image from "../assests/Images/Lecture_image.jpg"
 import College_Image from "../assests/Images/College_Image.jpg"
 import Doubt_Image from "../assests/Images/Doubt_Image.jpg"
 import { useNavigate } from "react-router";
+import { ToastContainer ,toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Hero= () =>{
     const navigate = useNavigate()
@@ -33,7 +35,7 @@ const Hero= () =>{
             {/* Add your College */}
             <div id="Add_College_Section" className="flex bg-cyan-200">
                 <div className="flex-col text-xl ml-3 justify-items-center text-center m-4">
-                    <div className="text-2xl border-4 border-black hover:bg-green-300 hover:duration-200 rounded-full border-spacing-2 md:whitespace-nowrap sm:p-2 lg:p-4 sm:w-8/12 lg:w-5/12 font-bold italic font-serif">Add Your College</div>
+                    <div className="text-2xl border-4 border-black hover:bg-green-300 hover:duration-200 rounded-full border-spacing-2 md:whitespace-nowrap sm:p-2 lg:p-4 sm:w-8/12 lg:w-5/12 font-bold italic font-serif" onClick={() => navigate('/college')}>Add Your College</div>
                     <div>If your college is not shown in our Search List then you can add your college name and then you upload Notes and Lectures according to College. </div>
                 </div>
                 <div className="flex w-full justify-end m-5 size-80">
@@ -50,7 +52,7 @@ const Hero= () =>{
                     <div>Clear Your Doubts from your seniors and professors. You can post our doubts globally so that anyone can answer of your query.</div>
                 </div>
             </div>
-            
+            <ToastContainer/>
         </>
     )
 }

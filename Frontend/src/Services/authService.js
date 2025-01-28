@@ -21,12 +21,7 @@ export class AuthService{
         }
     }
     async login(email,password){
-        try {
-            return await axios.post('/api/v1/users/login',{email,password})
-            
-        } catch (error) {
-            throw error
-        }
+        return await axios.post('/api/v1/users/login',{email,password})
     }
     async getCurrentUser() {
         try {
@@ -71,7 +66,7 @@ export class AuthService{
             
         }
     }
-    async updateUserInformation(fullName,email,college,year){
+    async updateUserInformation({fullName,email,college,year}){
         try {
             const formData= {}
 
@@ -82,7 +77,6 @@ export class AuthService{
 
             await axios.patch('/api/v1/users/updateDetails',formData)
             .then((response) =>{
-                this.removeAvatar()
                 return response.data
             })
             .catch((error) =>{
@@ -123,6 +117,18 @@ export class AuthService{
             console.error("Something went wrong while deleting user");   
         }
 
+    }
+    async removeCollege(){
+        axios.delete("/api/v1/users/removeCollege")
+        .then((response) =>{
+            return response;
+        })
+        .catch((error) =>{
+            console.error("Error while removing college",error);
+        })
+    }
+    async getAllCollege(){
+        return axios.get('/api/v1/users/getAllColleges');
     }
 }
 

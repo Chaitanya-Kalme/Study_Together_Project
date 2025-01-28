@@ -19,7 +19,8 @@ export default function UploadNotes() {
             setIsVisible(false)
             const response = notesService.uploadNotes(chapter,subject,notesFile)
             .then(() =>{
-                setNotesUploaded(true)
+                window.alert("Notes Uplaoded Successfully")
+                location.reload()
             })
             .catch(() => setNotesUploaded(false))
         }

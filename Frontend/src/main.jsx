@@ -12,6 +12,7 @@ import Profile from './Components/Profile.jsx'
 import Login from './Components/Login.jsx'
 import Lecture from './Components/Lecture.jsx'
 import LecturePage from './Components/LecturePage.jsx'
+import CollegeSection from './Components/CollegeSection.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,17 +23,16 @@ const router = createBrowserRouter(
       <Route path='profile' element={<Profile/>}/>
       <Route path='login' element={<Login/>}/>
       <Route path='lectures' element={<Lecture/>}/>
+      <Route path='college' element={<CollegeSection/>}/>
 
     </Route>
   )
 )
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <Provider store={store}>
       <RouterProvider router={router}>
         <App/>
       </RouterProvider>
     </Provider>
-  </StrictMode>,
 )

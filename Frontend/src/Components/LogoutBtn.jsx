@@ -3,6 +3,9 @@ import { useDispatch } from 'react-redux'
 import authService from '../Services/authService'
 import { logout } from '../store/authSlice'
 import { useNavigate } from 'react-router'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function LogoutBtn({
     className=""
@@ -14,12 +17,17 @@ function LogoutBtn({
         authService.logout()
         .then(() =>{
             dispatch(logout())
-            window.alert("Logout Successfully")
-            navigate('/')
+            toast.success("Logout Successfully")
+            setTimeout(() => {
+              navigate('/')
+            }, 1000);
         })
     }
   return (
-    <div className={className? className: `px-6 py-2 duration-200 hover:bg-orange-400 rounded-full text-2xl`} onClick={logoutHandler}>Logout</div>
+    <>
+      <div className={className? className: `px-6 py-2 duration-200 hover:bg-orange-400 rounded-full text-2xl`} onClick={logoutHandler}>Logout</div>
+      <ToastContainer/>
+    </>
   )
 }
 

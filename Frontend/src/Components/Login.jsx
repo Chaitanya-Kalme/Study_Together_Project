@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router'
 import authService from '../Services/authService'
 import { login as authLogin } from '../store/authSlice'
 import { useDispatch } from 'react-redux'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
     const [userName, setUserName] = useState("")
@@ -20,18 +22,20 @@ function Login() {
             const userData = response.data;
             if (userData) {
                 dispatch(authLogin(userData))
-                window.alert("User Logged In Successfully")
-                navigate('/')
+                toast.success("User Logged In Successfully")
+                setTimeout(() => {
+                    navigate('/')
+                }, 1000);
 
             }
             else {
                 setData(false)
-                
+                toast.error("Login failed! Invalid credentials.");
             }
         })
         .catch((error) => {
             console.error("Error while login")
-            
+            toast.error("An error occurred while logging in.");
         })
     }
     useEffect(() =>{
@@ -51,11 +55,11 @@ function Login() {
                     </div>
                     <div className='flex mx-5 lg:mx-52 space-x-10 p-2'>
                         <div className='text-xl'>Enter the Email:</div>
-                        <input type="text" className='bg-slate-50 text-xl md:whitespace-nowrap' value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="text" placeholder='Enter your Email' className='bg-slate-50 text-xl md:whitespace-nowrap' value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className='flex mx-5 lg:mx-52 space-x-10 p-2'>
                         <div className='text-xl'>Enter the Password:</div>
-                        <input type="password" className='text-xl bg-slate-50  md:whitespace-nowrap' value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <input type="password" placeholder='Enter your Password' className='text-xl bg-slate-50  md:whitespace-nowrap' value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <button id='Submit_btn' type='sumbit' className='border-2 border-black px-2 text-2xl bg-white my-2 hover:bg-blue-200 rounded-lg duration-200' >Submit</button>
                     <div className='space-x-10  text-2xl  flex-wrap flex text-center justify-center'>
@@ -67,6 +71,7 @@ function Login() {
                     
                 </div>
             </form>
+            <ToastContainer/>
         </>
     )
 }

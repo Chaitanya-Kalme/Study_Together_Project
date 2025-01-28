@@ -22,10 +22,8 @@ export default function UploadLecture() {
             setIsVisible(false)
             lectureService.uploadLecture(chapter,subject,lectureFile,thumbNail,description,isPublicAvailable)
             .then((response) =>{
-                setLectureUploaded(true)
-                const timer= setTimeout(() => {
-                    location.reload()
-                }, 1000);
+                window.alert("Lecture uploaded Successfully")
+                location.reload()
             })
             .catch(() => setLectureUploaded(false))
         }
