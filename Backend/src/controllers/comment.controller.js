@@ -5,16 +5,71 @@ import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 
-const getVideoComments = asyncHandler(async (req, res) => {
-    //TODO: get all comments for a video
-    const {videoId} = req.params
-    const {page = 1, limit = 10} = req.query
+
+const getComments = asyncHandler(async (req, res) => {
+    const {page = 1, limit = 25,college,videoId,notesId} = req.query
+
+    const getPage = parseInt(page)
+    const pageLimit= parseInt(limit)
+
+    const skip= (getPage-1)*pageLimit;
+
+    const comments = await Comment.aggregate([
+        {
+            $match: {
+                college:{
+                    $regex:college
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner"
+            }
+        },
+        {
+            $addFields:{
+                owner:{
+                    $first:"$owner"
+                }
+            }
+        },
+        {
+            $project: {
+                owner:{
+                  password:0,
+                  refreshToken:0
+                }
+              }
+        },
+        {
+            $sort:{createdAt:-1}
+        },
+        {
+            $skip:skip
+        },
+        {
+            $limit:pageLimit
+        },
+        {
+            $sort:{createdAt:1}
+        }
+    ])
+    
+    return res.status(200)
+    .json(
+        new ApiResponse(200,comments,"Comments Fetched Successfully")
+    )
 
 })
 
 const addComment = asyncHandler(async (req, res) => {
-    const {videoId,notesId}=req.params
+    const {videoId,notesId,college}=req.query
     const {content}=req.body
+
 
     if(!content){
         throw new ApiError(404,"Content is required")
@@ -24,20 +79,24 @@ const addComment = asyncHandler(async (req, res) => {
         throw new ApiError(404,"User is not logged in")
     }
     let video,notes;
-    if(videoId){
-        video= await Video.findById(videoId)
-    }
-    if(notesId){
-        notes = await Notes.findById(notesId)
-    }
+    // if(videoId){
+    //     video= await Video.findById(videoId)
+    // }
+    // if(notesId){
+    //     notes = await Notes.findById(notesId)
+    // }
 
     const comment = await Comment.create({
         content,
         video,
         notes,
+        college,
         owner:user
     })
 
+    if(!comment){
+        throw new ApiError(400,"Server Error while creating comment")
+    }
 
     return res.status(200)
     .json(
@@ -47,7 +106,6 @@ const addComment = asyncHandler(async (req, res) => {
 })
 
 const updateComment = asyncHandler(async (req, res) => {
-    // TODO: update a comment
     const {commentId}= req.params
     const {content} = req.body
 
@@ -81,7 +139,6 @@ const updateComment = asyncHandler(async (req, res) => {
 })
 
 const deleteComment = asyncHandler(async (req, res) => {
-    // TODO: delete a comment
     const {commentId} = req.params
 
     if(!commentId){
@@ -111,7 +168,7 @@ const deleteComment = asyncHandler(async (req, res) => {
 })
 
 export {
-    getVideoComments, 
+    getComments, 
     addComment, 
     updateComment,
      deleteComment

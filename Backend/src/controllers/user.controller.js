@@ -4,6 +4,9 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js"
 import jwt from "jsonwebtoken"
 import fs from "fs"
+import mongoose, { mongo, Mongoose } from "mongoose"
+import { parse } from "path"
+import { response } from "express"
 
 
 const generateAccessAndRefreshToken= async (userId) =>{
@@ -17,8 +20,6 @@ const generateAccessAndRefreshToken= async (userId) =>{
 
     return {accessToken,refreshToken}
 }
-
-
 
 const registerUser = asyncHandler( async (req,res) =>{
     const {userName,password,email,college,year}=req.body
@@ -188,6 +189,10 @@ const updateCurrentUserDetails= asyncHandler(async (req,res) =>{
     const updateFields={};
     if(fullName){
         updateFields.userName=fullName
+        const avatarExist= req.user?.avatar;
+        if(avatarExist && avatarExist.filename===toString(req.user?.userName[0]?.toUpperCase())+".jpg"){
+           () => { removeAvatar()};
+        }
     }
     if(email){
         updateFields.email=email
@@ -230,7 +235,7 @@ const updateAvatar= asyncHandler(async (req,res) =>{
             }
         },
         {
-            new:true
+            new:false
         }
     ).select("-password")
     return res
@@ -263,7 +268,66 @@ const removeAvatar = asyncHandler(async (req,res) => {
     )
 })
 
+const deleteUser = asyncHandler(async (req,res) =>{
+    const userId= req.user._id;
+    const avatarLocalPath= `${req.user.userName[0].toUpperCase()}.jpg`;
+    if(req.user?.avatar!=avatarLocalPath){
+        await fs.promises.unlink("public\\temp\\"+req.user?.avatar)
+    }
+    await User.findByIdAndDelete(req.user._id)
+    const checkUserExist = await User.findById(userId)
+    if(checkUserExist){
+        throw new ApiError(400,"Server error while deleting the user")
+    }
+    return res.status(200)
+    .json(
+        new ApiResponse(200,"User Deleted Successfully")
+    )
+})
+
+const removeCollege = asyncHandler(async (req,res) =>{
+    const user = req.user;
+    if(!user){
+        throw new ApiError(400,"Unauthorized Request from user")
+    }
+    const userExist = await User.findByIdAndUpdate(user._id,
+        {
+            $unset:{
+                college:null
+            }
+        },
+        {
+            new:true
+        }
+    )
+    if(!userExist){
+        throw new ApiError(404,"User Does not Exist")
+    }
+    return res.status(200)
+    .json(
+        new ApiResponse(200,"College Removed Successfully")
+    )
+})
 
 
+const getAllColleges = asyncHandler(async (req,res) =>{
+    const colleges = await User.aggregate([
+        {
+            $match:{
+                college:{$ne:null}
+            }
+        },
+        {
+            $group:{
+                _id:"$college"
+            }
+        }
+    ])
 
-export {registerUser,loginUser,logOutUser,refreshAccessToken,changePassword,updateCurrentUserDetails,updateAvatar,getCurrentUser,removeAvatar}
+    return res.status(200)
+    .json(
+        new ApiResponse(200,colleges,"Collges Name fetched Successfully")
+    )
+})
+
+export {registerUser,loginUser,logOutUser,refreshAccessToken,changePassword,updateCurrentUserDetails,updateAvatar,getCurrentUser,removeAvatar,deleteUser,removeCollege,getAllColleges}
