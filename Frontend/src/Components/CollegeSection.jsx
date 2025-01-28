@@ -15,7 +15,6 @@ export default function CollegeSection() {
     const [noText, setNoText] = useState(false)
 
     const updateCollege = () => {
-        console.log(inputCollegeName)
         if (inputCollegeName === "") {
             setNoText(true)
         }
@@ -39,7 +38,7 @@ export default function CollegeSection() {
         }
         else {
             setIsVisible(false)
-
+            setInputCollegeName(selectValue)
         }
 
     }
