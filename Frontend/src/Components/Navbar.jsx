@@ -31,7 +31,7 @@ function Navbar() {
                     <NavLink to='/notes' id="notes_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? " border-white border-2 bg-orange-200":"text-black"}`}>Notes</NavLink>
                     <NavLink to='/lectures' id="lectures_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? " border-white border-2 bg-orange-200":"text-black"}`}>Lectures</NavLink>
                     <NavLink to='/college' id="AboutBtn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? " border-white border-2 bg-orange-200":"text-black"}`}>College</NavLink>
-                    <NavLink to='/contact' id="contact_us_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? " border-white border-2 bg-orange-200":"text-black"}`}>Contact Us</NavLink>
+                    {/* <NavLink to='/contact' id="contact_us_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? " border-white border-2 bg-orange-200":"text-black"}`}>Contact Us</NavLink> */}
                     {authStatus? 
                     <div className='flex space-x-2'>
                         <NavLink to='/profile' id="contact_us_Btn" className={({isActive}) => `rounded-3xl p-2 text-2xl  hover:bg-blue-100 duration-300 ${isActive? "text- border-white border-2 bg-orange-200":"text-black"}`}>Profile</NavLink>
@@ -59,7 +59,7 @@ function Navbar() {
                     <div className="w-full border-b-2 border-black my-2"></div>
                     <NavLink to="/college" id="AboutBtn1" className='rounded-3xl p-2 text-2xl text-right hover:bg-green-100 duration-300'>College</NavLink>
                     <div className="w-full border-b-2 border-black my-2"></div>
-                    <NavLink to="/contact" id="contact_us_Btn1" className='rounded-3xl p-2 text-2xl text-right hover:bg-green-100 duration-300'>Contact Us</NavLink>
+                    {/* <NavLink to="/contact" id="contact_us_Btn1" className='rounded-3xl p-2 text-2xl text-right hover:bg-green-100 duration-300'>Contact Us</NavLink> */}
                     <div className="w-full border-b-2 border-black my-2"></div>
                     {authStatus? 
                     <div className='w-full text-end'>
